@@ -1,0 +1,25 @@
+pipeline {
+    agent any 
+    stages {
+        stage('PULL'){
+            steps {
+                git branch: 'dev', url: 'https://github.com/shubhamkalsait/ginger-main-frontend.git'
+            }
+        }
+        stage('INSTALL-PACKAGES'){
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('BUILD'){
+            steps {
+                sh 'npm run build'
+            }
+        }
+        stage('DEPLOY'){
+            steps {
+                sh 'aws s3 sync dist/ s3://ginger-frontend/'
+            }
+        }
+    }
+}
